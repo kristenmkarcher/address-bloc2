@@ -9,7 +9,7 @@ class AddressBook
   end
 
   def add_entry(name, phone_number, email)
-#to store the inserion index, a variable is created
+#to store the insertion index, a variable is created
     index = 0
     entries.each do |entry|
 #compares the name with the name of the current entry.
@@ -17,6 +17,17 @@ class AddressBook
       if name < entry.name
         break
       end
+
+  def remove_entry(name, phone_number, email)
+#loops through each entry in the array and allows the use of the index location number for each entry
+    entries.each_with_index do |entry, i|
+#if the name parameter is equal to the name value inside of the single entry(entry.name)
+      if name == entry.name
+#the value at the index location is deleted in the entries array
+        entries.delete_at(i)
+      end
+    end
+ end
       index += 1
     end
 #new entry is inserted into entries using the calculated index
