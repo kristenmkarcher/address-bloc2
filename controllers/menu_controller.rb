@@ -18,6 +18,8 @@ class MenuController
     puts "4 - Import entries from a CSV"
     puts "5 - Exit"
     print "Enter your selection: "
+    puts "6 - View Entry Number n"
+    print "Enter Entry Number: "
 #retrieves user input from the command line using gets. gets reads the next line from standard input
     selection = gets.to_i
 #case operator determines the proper response to the users input
@@ -40,6 +42,10 @@ class MenuController
       main_menu
     when 5
       puts "Good-bye!"
+    when 6
+      system "clear"
+      view_entry_number
+      main_menu
 #terminates the program. 0 signals the program is exiting without error
       exit(0)
 #else is used to catch invalid user input and prompt the user to retry
