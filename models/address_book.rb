@@ -35,4 +35,29 @@ class AddressBook
       add_entry(row_hash["name"], row_hash["phone_number"], row_hash["email"])
     end
   end
+
+  def binary_search(name)
+# the leftmost item in the array is a variable named lower, and the rightmost item in the array is a variable named upper
+    lower = 0
+    upper = entries.length - 1
+
+# loop while the lower index is less than or equal to the upper index
+    while lower <= upper
+# finds the middle index by taking the sum of lower and upper and dividing by 2
+    mid = (lower + upper) / 2
+    mid_name = entries[mid].name
+
+# name and mid_name are compared
+      if name == mid_name
+        return entries[mid]
+      elsif name < mid_name
+        upper = mid - 1
+      elsif name > mid_name
+        lower = mid + 1
+      end
+    end
+
+# if no match is found, it returns nil
+    return nil
+   end
 end
