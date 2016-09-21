@@ -84,9 +84,44 @@ class MenuController
   end
 
   def search_entries
+#gets the name the user wants to search for and stores it in name
+    print "Search by name: "
+    name = gets.chomp
+#search is called on address_book which will return a match or nil
+    match = address_book.binary_search(name)
+    system "clear"
+#checks if search returned a match
+    if match
+      puts match.to_s
+      search_submenu(match)
+    else
+      puts "No match found for #{name}"
+    end
   end
 
   def read_csv
+#prompts the user to enter a name of a CSV file to import
+    print "Enter CSV file to import: "
+    file_name = gets.chomp
+
+#checks if the file name is empty. if it is then the user is returned back to the main menu by calling main_menu
+    if file_name.empty?
+      system "clear"
+      puts "No CSV file read"
+      main_menu
+    end
+
+#the specified file is imported with import_from_csv on address book
+#the screen is cleared and the number of entries that were read from the file are printed
+#begin will protect the program from crashing if an exception is thrown
+    begin
+      entry_count = address_book.import_from_csv(file_name).count
+      system "clear"
+      puts "#{entry_count} new entries added from #{file_name}"
+    rescue
+      puts "#{file_name} is not a valid CSV file, please enter the name of a valid CSV file"
+      read_csv
+    end
   end
 
   def entry_submenu(entry)
@@ -104,7 +139,13 @@ class MenuController
     when "n"
 #user is shown deleting and editing
     when "d"
+#when a user is viewing the submenu and they press d, delete_entry is called
+#after the entry is deleted, control will return to view_all_entries and the next entry will be displayed
+      delete_entry(entry)
     when "e"
+#edit_entry is called when a user presses e. a submenu is displayed with entry_submenu for the entry under edit
+      edit_entry(entry)
+      entry_submenu(entry)
 #returns user to the main menu
     when "m"
       system "clear"
@@ -113,6 +154,58 @@ class MenuController
       system "clear"
       puts "#{selection} is not a valid input"
       entry_submenu(entry)
+    end
+  end
+
+  def delete_entry(entry)
+    address_book.entries.delete(entry)
+    puts "#{entry.name} has been deleted"
+  end
+
+  def edit_entry(entry)
+# gets.chomp gathers user input and assigns it to an appropriately named variable
+    print "Updated name: "
+    name = gets.chomp
+    print "Updated phone number: "
+    phone_number = gets.chomp
+    print "Updated email: "
+    email = gets.chomp
+#!attribute.empty? sets attributes on entry only if a valid attribute was read form user input
+    entry.name = name if !name.empty?
+    entry.phone_number = phone_number if !phone_number.empty?
+    entry.email = email if !email.empty?
+    system "clear"
+#entry is printed out with the updated attributes
+    puts "Updated entry:"
+    puts entry
+  end
+
+  def search_submenu(entry)
+# prints out submenu for entry
+    puts "\nd - delete entry"
+    puts "e - edit this entry"
+    puts "m - return to main menu"
+#the user input is saved to selection
+    selection = gets.chomp
+
+# case statement is used to take a specific action based on user input
+    case selection
+    when "d"
+      system "clear"
+      delete_entry(entry)
+      main_menu
+    when "e"
+      edit_entry(entry)
+      system "clear"
+      main_menu
+    when "m"
+      system "clear"
+      main_menu
+    else
+      system "clear"
+      puts "#{selection} is not a valid input"
+      puts entry.to_s
+      search_submenu(entry)
     end
   end
 end
