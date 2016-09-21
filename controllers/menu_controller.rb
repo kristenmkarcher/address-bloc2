@@ -162,6 +162,13 @@ class MenuController
     puts "#{entry.name} has been deleted"
   end
 
+  def demolish_entries
+    address_book.entries.each do |entry|
+      address_book.entries.delete(entry)
+      puts "#{entry.name} has been deleted"
+    end
+  end
+
   def edit_entry(entry)
 # gets.chomp gathers user input and assigns it to an appropriately named variable
     print "Updated name: "
@@ -185,6 +192,7 @@ class MenuController
     puts "\nd - delete entry"
     puts "e - edit this entry"
     puts "m - return to main menu"
+    puts "k - delete all entries"
 #the user input is saved to selection
     selection = gets.chomp
 
@@ -200,6 +208,10 @@ class MenuController
       main_menu
     when "m"
       system "clear"
+      main_menu
+    when "k"
+      system "clear"
+      demolish_entries
       main_menu
     else
       system "clear"
